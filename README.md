@@ -8,7 +8,7 @@ npx hardhat run scripts/impersonate-orlando.mjs
 yarn flashbots
 
 # run the BSC script
-# yarn bsc
+yarn bsc
 ```
 
 ## technical details
