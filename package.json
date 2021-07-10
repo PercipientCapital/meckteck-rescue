@@ -7,7 +7,9 @@
   "scripts": {
     "start": "echo 'brock is v lazy' && cat README.md | head -n 12",
     "flashbots": "node src/flashbots.mjs",
-    "stats": "node src/amICool.mjs"
+    "stats": "node src/amICool.mjs",
+    "eth-hardhat": "npx hardhat run scripts/impersonate-orlando.mjs",
+    "bsc": "node src/bsc.mjs"
   },
   "dependencies": {
     "@flashbots/ethers-provider-bundle": "^0.3.1",

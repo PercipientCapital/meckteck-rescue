@@ -55,6 +55,8 @@ Recoverable assets: CAKE, BUNNY, WISE.
     * `withdrawableBalanceOf` (17.948)
 * WISE Staking contract: [`0xa79b25e1aa4ece82f681598ae2e1a8aacab4dca6`](https://bscscan.com/address/0xa79b25e1aa4ece82f681598ae2e1a8aacab4dca6)
 
+#### CAKE/BUNNY
+
 Bunny is a lending/staking platform. _victim_ earns CAKE & BUNNY by depositing CAKE. [CAKE/BUNNY Pool](https://pancakebunny.finance/pool/CAKE)
 
 It looks like by exiting from the CAKE staking contract, we will receive both CAKE & BUNNY tokens.
@@ -80,4 +82,6 @@ relevant methods to investigate: `getReward`, `harvest`, `withdraw`, `withdrawUn
 
 ... it transfers LP tokens from sender to contract. Why is this called?
 
-Fuggit let's just run a sim in **hardhat** and see what happens.
+#### WISE
+
+`$getMyTokens` appears to be the function we need to unstake.

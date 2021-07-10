@@ -6,11 +6,12 @@ require("dotenv").config();
  */
 module.exports = {
   solidity: "0.7.3",
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
       forking: {
         url: process.env.ETH_RPC_HTTP,
       }
-    }
+    },
   }
 };
