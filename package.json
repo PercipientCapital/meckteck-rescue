@@ -5,12 +5,15 @@
   "author": "brock",
   "license": "MIT",
   "scripts": {
-    "start": "node src/main.mjs"
+    "start": "echo 'brock is v lazy' && cat README.md | head -n 12",
+    "flashbots": "node src/flashbots.mjs",
+    "stats": "node src/amICool.mjs"
   },
   "dependencies": {
     "@flashbots/ethers-provider-bundle": "^0.3.1",
     "dotenv": "^10.0.0",
-    "ethers": "^5.3.1"
+    "ethers": "^5.3.1",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",

@@ -1,5 +1,16 @@
 # flashbots rescue
 
+```sh
+# run the ETH impersonation script
+npx hardhat run scripts/impersonate-orlando.mjs
+
+# run the flashbots script
+yarn flashbots
+
+# run the BSC script
+# ...?
+```
+
 ## technical details
 
 compromised account: `0xfcF4710e3078c3b28dcCc90adf3a1faFf6dD3a7A`
