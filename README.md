@@ -68,19 +68,9 @@ relevant methods to investigate: `getReward`, `harvest`, `withdraw`, `withdrawUn
 
 `withdrawAll` does two (relevant) things: `CAKE.safeTransfer` (transfers CAKE), and `_harvest(cakeHarvested)`. The functionality of the former is obvious, but what does `_harvest` do? `getReward` does the same but it only claims the reward amount; doesn't transfer out _everything_.
 
-`_harvest` does this:
+...
 
-```js
-    CAKE_MASTER_CHEF.enterStaking(cakeAmount);
-```
-
-... which, in the CAKE_MASTER_CHEF contract, does this:
-
-```js
-    pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
-```
-
-... it transfers LP tokens from sender to contract. Why is this called?
+After running hardhat simulations, it's apparent that `withdrawAll` is the function we need to call to recover the CAKE & BUNNY tokens.
 
 #### WISE
 
