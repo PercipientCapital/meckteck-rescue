@@ -11,6 +11,11 @@ yarn flashbots
 yarn bsc
 ```
 
+## meat and potatoes
+
+* [hardhat simulation script](./scripts/impersonate-meckteck.mjs)
+* [flashbots script](./src/flashbots.mjs)
+
 ## technical details
 
 compromised account: `0xF248f7e076F8F63b39DEcEf2B115E01c9c6c8978`
