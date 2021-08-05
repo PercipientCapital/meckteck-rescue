@@ -32,9 +32,9 @@ console.log(`VICTIM WALLET\t(${victimAddress}) ${utils.formatEther(await provide
 console.log(`SAFE WALLET\t(${recipientAddress}) ${utils.formatEther(await provider.getBalance(recipientAddress))} ETH`);
 console.log(`DONOR WALLET\t(${donorAddress}) ${utils.formatEther(await provider.getBalance(donorAddress))} ETH`);
 
-// tokens currently sitting in victim wallet
-const nimbusTokenBalance = await nimbusTokenContract.balanceOf(victimAddress);
-const nimbusGovernanceBalance = await nimbusGovernanceContract.balanceOf(victimAddress);
+// tokens currently sitting in victim wallet (that can be transferred)
+const nimbusTokenBalance = await nimbusTokenContract.availableForTransfer(victimAddress);
+const nimbusGovernanceBalance = await nimbusGovernanceContract.availableForTransfer(victimAddress);
 
 // print token balances before un-staking
 console.log("\n*** Pre-exit Balances ***");
@@ -42,8 +42,11 @@ console.log("NBU Balance", utils.formatEther(nimbusTokenBalance));
 console.log("GNBU Balance", utils.formatEther(nimbusGovernanceBalance));
 
 // how much we should expect to have after unstake
-const expectedNimbusBalance = BigNumber.from("0x8a6a5de46fe3e9f309");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
-const expectedNimbusGovernanceBalance = BigNumber.from("0xb08ff473aca7440000");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+const expectedNimbusBalance = BigNumber.from("0x39906053ca922b50e0");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+const expectedNimbusGovernanceBalance = BigNumber.from("0x175a1794902f028bb4");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+
+const startNonce = await provider.getTransactionCount(victimAddress);
+console.log("starting nonce", startNonce);
 
 // transactions: unstake & transfer
 const zeroGasTxs = [
@@ -51,21 +54,25 @@ const zeroGasTxs = [
         ...(await nimbusTokenContract.populateTransaction.unvest()),
         gasPrice: BigNumber.from(0),
         gasLimit: BigNumber.from(180000),
+        nonce: nonce,
     },
     { // unvest GNBU tokens
         ...(await nimbusGovernanceContract.populateTransaction.unvest()),
         gasPrice: BigNumber.from(0),
         gasLimit: BigNumber.from(80000),
+        nonce: nonce + 1,
     },
     { // transfer NBU tokens to safe address
-        ...(await nimbusTokenContract.populateTransaction.transfer()),
+        ...(await nimbusTokenContract.populateTransaction.transfer(recipientAddress, expectedNimbusBalance)),
         gasPrice: BigNumber.from(0),
         gasLimit: BigNumber.from(50000),
+        nonce: nonce + 2,
     },
     { // transfer GNBU tokens to safe address
-        ...(await nimbusGovernanceContract.populateTransaction.transfer()),
+        ...(await nimbusGovernanceContract.populateTransaction.transfer(recipientAddress, expectedNimbusGovernanceBalance)),
         gasPrice: BigNumber.from(0),
         gasLimit: BigNumber.from(50000),
+        nonce: nonce + 3,
     },
 ];
 
@@ -75,13 +82,16 @@ const zeroGasTxs = [
 
 // build donor transaction
 const checkTargets = [
-    duckTokenContract.address,
+    nimbusTokenContract.address,
+    nimbusGovernanceContract.address,
 ];
 const checkPayloads = [
-    duckTokenContract.interface.encodeFunctionData('balanceOf', [recipientAddress]),
+    nimbusTokenContract.interface.encodeFunctionData('availableForTransfer', [recipientAddress]),
+    nimbusGovernanceContract.interface.encodeFunctionData('availableForTransfer', [recipientAddress]),
 ];
 const checkMatches = [
-    duckTokenContract.interface.encodeFunctionResult('balanceOf', [expectedDuckBalance]),
+    nimbusTokenContract.interface.encodeFunctionResult('availableForTransfer', [expectedNimbusBalance]),
+    nimbusGovernanceContract.interface.encodeFunctionResult('availableForTransfer', [expectedNimbusGovernanceBalance]),
 ];
 const donorTx = {
     ...(await checkAndSendContract.populateTransaction.check32BytesAndSendMulti(checkTargets, checkPayloads, checkMatches)),
