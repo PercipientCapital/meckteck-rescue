@@ -6,6 +6,10 @@ import contracts from "./contracts.mjs";
 import { sleep } from "./util.mjs";
 import { beepBoop } from "./util.mjs";
 
+console.log("THIS SCRIPT WAS COPIED FROM ANOTHER RESCUE AND IS NOT APPLICABLE TO Meckteck.");
+console.log("MODIFY THIS SCRIPT BEFORE RUNNING AGAIN.");
+process.exit(0);
+
 const IS_SIMULATION = process.env.BSC_SIMULATION === "true";
 
 await beepBoop(3, IS_SIMULATION ? "COMMENCING SIMULATION MODE" : "THIS IS NOT A SIMULATION!!!");
