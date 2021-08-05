@@ -1,6 +1,5 @@
 import hre from "hardhat";
 import contracts from "../src/contracts.mjs";
-// import { sleep } from "../src/util.mjs";
 const ethers = hre.ethers;
 
 const victimAddress = "0xF248f7e076F8F63b39DEcEf2B115E01c9c6c8978";
@@ -8,10 +7,6 @@ const victimAddress = "0xF248f7e076F8F63b39DEcEf2B115E01c9c6c8978";
 const donorAddress = "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266";
 // one of my 1337 addresses
 const recipientAddress = "0x1333756bb3CEC30c8F321A016bd80E8f3dc4a589";
-
-// ERC20s
-// const aWethAddress = "0x030ba81f1c18d280636f32af80b9aad02cf0854e";
-// const vdUsdcAddress = "0x619beb58998ed2278e08620f97007e1116d5d25b";
 
 const impersonate = async (address) => {
     return await hre.network.provider.request({
@@ -43,7 +38,6 @@ const fundVictimAccount = async () => {
 async function main() {
     // give victim account some test moneys
     await fundVictimAccount();
-    // await sleep(5000);
     await impersonate(victimAddress);
     const victimSigner = ethers.provider.getSigner(victimAddress);
 
