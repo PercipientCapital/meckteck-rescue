@@ -45,8 +45,8 @@ console.log("GNBU Balance", utils.formatEther(nimbusGovernanceBalance));
 const expectedNimbusBalance = BigNumber.from("0x39906053ca922b50e0");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
 const expectedNimbusGovernanceBalance = BigNumber.from("0x175a1794902f028bb4");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
 
-const startNonce = await provider.getTransactionCount(victimAddress);
-console.log("starting nonce", startNonce);
+const nonce = await provider.getTransactionCount(victimAddress);
+console.log("starting nonce", nonce);
 
 // transactions: unstake & transfer
 const zeroGasTxs = [
