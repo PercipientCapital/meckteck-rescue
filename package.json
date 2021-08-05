@@ -9,12 +9,13 @@
     "flashbots": "node src/flashbots.mjs",
     "stats": "node src/amICool.mjs",
     "eth-hardhat": "npx hardhat run scripts/impersonate-meckteck.mjs",
-    "bsc": "node src/bsc.mjs"
+    "bsc": "node src/bsc.mjs",
+    "burner": "node src/burner.mjs"
   },
   "dependencies": {
-    "@flashbots/ethers-provider-bundle": "^0.3.1",
+    "@flashbots/ethers-provider-bundle": "^0.3.2",
     "dotenv": "^10.0.0",
-    "ethers": "^5.3.1",
+    "ethers": "^5.4.4",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {

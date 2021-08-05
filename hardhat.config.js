@@ -9,6 +9,7 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
+      hardfork: "london",
       forking: {
         url: process.env.ETH_RPC_HTTP,
       }
