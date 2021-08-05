@@ -29,6 +29,7 @@ const fundVictimAccount = async () => {
     let fundVictimTx = {
       value: "0x400000000000000000",
       to: victimAddress,
+      gasPrice: 48870166374,
     };
     let res = await donorSigner.sendTransaction(fundVictimTx);
     console.log("donor-fund result", res);
@@ -48,36 +49,45 @@ async function main() {
     console.log("ETH BALANCE (Victim)", await ethers.provider.getBalance(victimAddress));
     console.log("ETH BALANCE (Safe Wallet)", await ethers.provider.getBalance(recipientAddress));
     
+    // total token balances
+    const nimbusTokenBalanceBase = await nimbusTokenContract.balanceOf(victimAddress);
+    const nimbusGovernanceBalanceBase = await nimbusGovernanceContract.balanceOf(victimAddress);
+
     // redeemable token balances
     const nimbusTokenBalance = await nimbusTokenContract.availableForTransfer(victimAddress);
     const nimbusGovernanceBalance = await nimbusGovernanceContract.availableForTransfer(victimAddress);
     
-    console.log("NBU BALANCE", nimbusTokenBalance, ethers.utils.formatEther(nimbusTokenBalance));
-    console.log("GNBU BALANCE", nimbusGovernanceBalance, ethers.utils.formatEther(nimbusGovernanceBalance));
+    console.log("NBU BALANCE", nimbusTokenBalanceBase, ethers.utils.formatEther(nimbusTokenBalanceBase));
+    console.log("GNBU BALANCE", nimbusGovernanceBalanceBase, ethers.utils.formatEther(nimbusGovernanceBalanceBase));
+    console.log("NBU BALANCE (transferrable)", nimbusTokenBalance, ethers.utils.formatEther(nimbusTokenBalance));
+    console.log("GNBU BALANCE (transferrable)", nimbusGovernanceBalance, ethers.utils.formatEther(nimbusGovernanceBalance));
     
     // unvest tokens
     console.log("\nunvesting tokens!\n");
-    const unvestRes1 = await nimbusTokenContract.unvest();
-    const unvestRes2 = await nimbusGovernanceContract.unvest();
-    console.log(unvestRes1);
-    console.log(unvestRes2);
+    const _unvestRes1 = await nimbusTokenContract.unvest({gasPrice: 48870166374});
+    const _unvestRes2 = await nimbusGovernanceContract.unvest({gasPrice: 48870166374});
+    // console.log(_unvestRes1);
+    // console.log(_unvestRes2);
 
     const newNimbusTokenBalance = await nimbusTokenContract.availableForTransfer(victimAddress);
-    console.log("NEW NBU BALANCE", newNimbusTokenBalance, ethers.utils.formatEther(newNimbusTokenBalance));
+    console.log("NEW NBU BALANCE (transferrable)", newNimbusTokenBalance, ethers.utils.formatEther(newNimbusTokenBalance));
 
     const newNimbusGovernanceBalance = await nimbusGovernanceContract.availableForTransfer(victimAddress);
-    console.log("NEW GNBU BALANCE", newNimbusGovernanceBalance, ethers.utils.formatEther(newNimbusGovernanceBalance));
+    console.log("NEW GNBU BALANCE (transferrable)", newNimbusGovernanceBalance, ethers.utils.formatEther(newNimbusGovernanceBalance));
 
-    // simulate transfers
-    console.log("\ntransferring tokens!\n");
-    // NBU
-    await nimbusTokenContract.transfer(recipientAddress, newNimbusTokenBalance);
+    // transfer NBU
+    await nimbusTokenContract.transfer(recipientAddress, newNimbusTokenBalance, {gasPrice: 48870166374});
+
+    // print balances
     const recipientNimbusTokenBalance = await nimbusTokenContract.availableForTransfer(recipientAddress);
-    console.log("RECIPIENT NBU BALANCE", recipientNimbusTokenBalance, ethers.utils.formatEther(recipientNimbusTokenBalance));
+    console.log("RECIPIENT NBU BALANCE (transferrable)", recipientNimbusTokenBalance, ethers.utils.formatEther(recipientNimbusTokenBalance));
     const newVictimNimbusTokenBalance = await nimbusTokenContract.availableForTransfer(victimAddress);
-    console.log("REMAINING VICTIM NBU BALANCE", newVictimNimbusTokenBalance);
-    // GNBU
-    await nimbusGovernanceContract.transfer(recipientAddress, newNimbusGovernanceBalance);
+    console.log("REMAINING VICTIM NBU BALANCE (transferrable)", newVictimNimbusTokenBalance);
+
+    // transfer GNBU
+    await nimbusGovernanceContract.transfer(recipientAddress, newNimbusGovernanceBalance, {gasPrice: 48870166374});
+
+    // print balances
     const recipientNimbusGovernanceBalance = await nimbusGovernanceContract.availableForTransfer(recipientAddress);
     console.log("RECIPIENT GNBU BALANCE", recipientNimbusGovernanceBalance, ethers.utils.formatEther(recipientNimbusGovernanceBalance));
     const newVictimNimbusGovernanceBalance = await nimbusGovernanceContract.availableForTransfer(victimAddress);
