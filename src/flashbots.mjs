@@ -23,8 +23,8 @@ const provider = new providers.JsonRpcProvider({url: process.env.ETH_RPC_HTTP}, 
 const flashbotsProvider = await FlashbotsBundleProvider.create(provider, authSigner);
 
 // contracts
-const duckStakingContract = new Contract(contracts.duckStaking.address, contracts.duckStaking.abi, provider);
-const duckTokenContract = new Contract(contracts.duckToken.address, contracts.anyERC20.abi, provider);
+const nimbusTokenContract = new Contract(contracts.nimbusToken.address, contracts.nimbusToken.abi, provider);
+const nimbusGovernanceContract = new Contract(contracts.nimbusGovernance.address, contracts.nimbusGovernance.abi, provider);
 const checkAndSendContract = new Contract(contracts.checkAndSend.address, contracts.checkAndSend.abi, provider);
 
 // print starting ETH balances
@@ -33,31 +33,45 @@ console.log(`SAFE WALLET\t(${recipientAddress}) ${utils.formatEther(await provid
 console.log(`DONOR WALLET\t(${donorAddress}) ${utils.formatEther(await provider.getBalance(donorAddress))} ETH`);
 
 // tokens currently sitting in victim wallet
-const duckTokenBalance = await duckTokenContract.balanceOf(victimAddress);
-// amount we can unstake
-const duckStakingBalance = (await duckStakingContract.userInfo(victimAddress))["staked"];
+const nimbusTokenBalance = await nimbusTokenContract.balanceOf(victimAddress);
+const nimbusGovernanceBalance = await nimbusGovernanceContract.balanceOf(victimAddress);
 
 // print token balances before un-staking
 console.log("\n*** Pre-exit Balances ***");
-console.log("DUCK Balance", utils.formatEther(duckTokenBalance));
-console.log("DUCK Staking Balance", utils.formatEther(duckStakingBalance));
+console.log("NBU Balance", utils.formatEther(nimbusTokenBalance));
+console.log("GNBU Balance", utils.formatEther(nimbusGovernanceBalance));
 
 // how much we should expect to have after unstake
-const expectedDuckBalance = BigNumber.from("0x67ad9ee3759772696b");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+const expectedNimbusBalance = BigNumber.from("0x8a6a5de46fe3e9f309");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+const expectedNimbusGovernanceBalance = BigNumber.from("0xb08ff473aca7440000");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
 
 // transactions: unstake & transfer
 const zeroGasTxs = [
-    { // unstake
-        ...(await duckStakingContract.populateTransaction.withdraw(duckStakingBalance)),
+    { // unvest NBU tokens
+        ...(await nimbusTokenContract.populateTransaction.unvest()),
         gasPrice: BigNumber.from(0),
         gasLimit: BigNumber.from(180000),
     },
-    { // transfer DUCK tokens (in wallet after withdraw/unstake)
-        ...(await duckTokenContract.populateTransaction.transfer(recipientAddress, expectedDuckBalance)),
+    { // unvest GNBU tokens
+        ...(await nimbusGovernanceContract.populateTransaction.unvest()),
         gasPrice: BigNumber.from(0),
         gasLimit: BigNumber.from(80000),
     },
+    { // transfer NBU tokens to safe address
+        ...(await nimbusTokenContract.populateTransaction.transfer()),
+        gasPrice: BigNumber.from(0),
+        gasLimit: BigNumber.from(50000),
+    },
+    { // transfer GNBU tokens to safe address
+        ...(await nimbusGovernanceContract.populateTransaction.transfer()),
+        gasPrice: BigNumber.from(0),
+        gasLimit: BigNumber.from(50000),
+    },
 ];
+
+
+////////////////////////////////////////////// UNFINISHED BELOW ///////////////////////////////////////////////////
+
 
 // build donor transaction
 const checkTargets = [

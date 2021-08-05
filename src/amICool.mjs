@@ -4,6 +4,10 @@ import { ethers } from "ethers";
 import dotenv from "dotenv";
 dotenv.config();
 
+// const sendingAccount = {
+//   privateKey: process.env.BUNDLE_SIGNER_REPUTATION_KEY,
+//   address: process.env.BUNDLE_SIGNER_REPUTATION_ADDRESS,
+// };
 const sendingAccount = {
   privateKey: process.env.BUNDLE_SIGNER_REPUTATION_KEY,
   address: process.env.BUNDLE_SIGNER_REPUTATION_ADDRESS,

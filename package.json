@@ -8,7 +8,7 @@
     "start": "echo 'brock is v lazy' && cat README.md | head -n 12",
     "flashbots": "node src/flashbots.mjs",
     "stats": "node src/amICool.mjs",
-    "eth-hardhat": "npx hardhat run scripts/impersonate-orlando.mjs",
+    "eth-hardhat": "npx hardhat run scripts/impersonate-meckteck.mjs",
     "bsc": "node src/bsc.mjs"
   },
   "dependencies": {
