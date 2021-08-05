@@ -41,8 +41,8 @@ console.log("NBU Balance", utils.formatEther(nimbusTokenBalance));
 console.log("GNBU Balance", utils.formatEther(nimbusGovernanceBalance));
 
 // how much we should expect to have after unstake
-const expectedNimbusBalance = BigNumber.from("0x39e84c9ea6cbf663ed");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
-const expectedNimbusGovernanceBalance = BigNumber.from("0x178fa25abac8108602");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+const expectedNimbusBalance = BigNumber.from("0x3a099b217caeb6a116");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
+const expectedNimbusGovernanceBalance = BigNumber.from("0x17a3eab4a890f3da37");        // pre-calculated with hardhat // TODO: always re-run right before recovery since this should increase over time)
 
 const nonce = await provider.getTransactionCount(victimAddress);
 const block = await provider.getBlock("latest");

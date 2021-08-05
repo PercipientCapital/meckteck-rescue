@@ -75,7 +75,8 @@ async function main() {
 
     const newNimbusGovernanceBalance = await nimbusGovernanceContract.availableForTransfer(victimAddress);
     console.log("NEW GNBU BALANCE (transferrable)", newNimbusGovernanceBalance, ethers.utils.formatEther(newNimbusGovernanceBalance));
-    console.log(``);
+
+    console.log("\ntransferring tokens!\n");
 
     // transfer NBU
     await nimbusTokenContract.transfer(recipientAddress, newNimbusTokenBalance, {gasPrice: 60000000000});
