@@ -11,6 +11,12 @@ yarn flashbots
 yarn bsc
 ```
 
+## TODO
+
+* [ ] get private key
+* [ ] ensure transactions work with EIP-1559, modify if necessary
+* [ ] save the moneys
+
 ## meat and potatoes
 
 * [hardhat simulation script](./scripts/impersonate-meckteck.mjs)

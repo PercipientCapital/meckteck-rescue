@@ -76,10 +76,6 @@ const zeroGasTxs = [
     },
 ];
 
-
-////////////////////////////////////////////// UNFINISHED BELOW ///////////////////////////////////////////////////
-
-
 // build donor transaction
 const checkTargets = [
     nimbusTokenContract.address,
